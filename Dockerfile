@@ -1,20 +1,11 @@
 FROM docker:17.05.0-ce-git
 
-# Install Java.
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y oracle-java8-installer && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
+RUN yum -y update && yum clean all
 
+# User root user to install software
+USER root
 
-# Define working directory.
-WORKDIR /data
+# Install necessary packages
+RUN yum -y install java-1.7.0-openjdk-devel && yum clean all
+#RUN yum -y install java-1.8.0-openjdk-devel && yum clean all
 
-# Define commonly used JAVA_HOME variable
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
-
-# Define default command.
-CMD ["bash"]
